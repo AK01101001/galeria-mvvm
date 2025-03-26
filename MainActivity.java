@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         binding.prawo.setOnClickListener(view1 -> prawo());
         obrazy = new ArrayList<Integer>();
         imageviewModel = new ViewModelProvider(this).get(ImageviewModel.class);
+        imageviewModel.isset();
         imageviewModel.indeks.observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
@@ -48,19 +49,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void prawo()
     {
-        imageviewModel.prawo();
-        if (imageviewModel.pobierzindeks()>obrazy.size()-1)
+        if (imageviewModel.pobierzindeks()+1>obrazy.size()-1)
         {
             imageviewModel.ustawIndeks(0);
         }
+        else {
+            imageviewModel.prawo();
+        }
+
     }
     private void lewo()
     {
-        imageviewModel.lewo();
 
-        if (imageviewModel.pobierzindeks()<0)
+        if (imageviewModel.pobierzindeks()-1<0)
         {
             imageviewModel.ustawIndeks(obrazy.size()-1);
+        }
+        else
+        {
+            imageviewModel.lewo();
         }
     }
     private void wyswietl() {

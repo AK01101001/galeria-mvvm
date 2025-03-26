@@ -7,35 +7,33 @@ public class ImageviewModel extends ViewModel {
 
     MutableLiveData<Integer> indeks;
 
-    public MutableLiveData<Integer> getIndeks() {
-        if (indeks==null)
-        {
-            indeks = new MutableLiveData<>();
-        }
-        return indeks;
-    }
-
-    public void setIndeks(MutableLiveData<Integer> indeks) {
-        if (indeks==null)
-        {
-            indeks = new MutableLiveData<>();
-        }
-        this.indeks = indeks;
-    }
-    int pobierzindeks()
+    Integer pobierzindeks()
     {
+        isset();
         return indeks.getValue();
     }
     void ustawIndeks(int i)
     {
+        isset();
         indeks.setValue(i);
     }
     void prawo()
     {
-        indeks.setValue(indeks.getValue()+1);
+        isset();
+        indeks.setValue(pobierzindeks()+1);
     }
     void lewo()
     {
-        indeks.setValue(indeks.getValue()-1);
+        isset();
+        indeks.setValue(pobierzindeks()-1);
+    }
+    void isset()
+    {
+        if (indeks==null)
+        {
+            indeks = new MutableLiveData<>();
+            indeks.setValue(0);
+        }
+
     }
 }
