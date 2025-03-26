@@ -1,6 +1,7 @@
 package com.example.galeriamvvm;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.graphics.drawable.Drawable;
@@ -16,45 +17,53 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     ImageviewModel imageviewModel;
     private ArrayList<Integer> obrazy;
+    public MainActivity instance;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+        instance = this;
         binding.lewo.setOnClickListener(view1 -> lewo());
         binding.prawo.setOnClickListener(view1 -> prawo());
         obrazy = new ArrayList<Integer>();
-        dodajobrazy();
         imageviewModel = new ViewModelProvider(this).get(ImageviewModel.class);
+        imageviewModel.indeks.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                wyswietl();
+            }
+        });
+        dodajobrazy();
+
     }
 
     private void dodajobrazy() {
         obrazy.add(R.drawable.wb);
         obrazy.add(R.drawable.mire);
         obrazy.add(R.drawable.wh);
+        wyswietl();
     }
 
     private void prawo()
     {
-        imageviewModel.setIndeks(imageviewModel.getIndeks()+1);
-        if (imageviewModel.getIndeks()>obrazy.size()-1)
+        imageviewModel.prawo();
+        if (imageviewModel.pobierzindeks()>obrazy.size()-1)
         {
-            imageviewModel.setIndeks(0);
+            imageviewModel.ustawIndeks(0);
         }
-        wyswietl();
     }
     private void lewo()
     {
-        imageviewModel.setIndeks(imageviewModel.getIndeks()-1);
+        imageviewModel.lewo();
 
-        if (imageviewModel.getIndeks()<0)
+        if (imageviewModel.pobierzindeks()<0)
         {
-            imageviewModel.setIndeks(obrazy.size()-1);
+            imageviewModel.ustawIndeks(obrazy.size()-1);
         }
-        wyswietl();
     }
     private void wyswietl() {
-        binding.image.setImageResource(obrazy.get(imageviewModel.getIndeks()));
+        binding.image.setImageResource(obrazy.get(imageviewModel.pobierzindeks()));
     }
 }
