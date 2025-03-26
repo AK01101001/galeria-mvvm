@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
-    int indeks;
+    ImageviewModel imageviewModel;
     private ArrayList<Integer> obrazy;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         binding.prawo.setOnClickListener(view1 -> prawo());
         obrazy = new ArrayList<Integer>();
         dodajobrazy();
+        imageviewModel = new ViewModelProvider(this).get(ImageviewModel.class);
     }
 
     private void dodajobrazy() {
@@ -36,23 +37,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void prawo()
     {
-        indeks++;
-        if (indeks>obrazy.size()-1)
+        imageviewModel.setIndeks(imageviewModel.getIndeks()+1);
+        if (imageviewModel.getIndeks()>obrazy.size()-1)
         {
-            indeks=0;
+            imageviewModel.setIndeks(0);
         }
         wyswietl();
     }
     private void lewo()
     {
-        indeks--;
-        if (indeks<0)
+        imageviewModel.setIndeks(imageviewModel.getIndeks()-1);
+
+        if (imageviewModel.getIndeks()<0)
         {
-            indeks= obrazy.size()-1;
+            imageviewModel.setIndeks(obrazy.size()-1);
         }
         wyswietl();
     }
     private void wyswietl() {
-        binding.image.setImageResource(obrazy.get(indeks));
+        binding.image.setImageResource(obrazy.get(imageviewModel.getIndeks()));
     }
 }
